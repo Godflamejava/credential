@@ -8,7 +8,7 @@ contract Marketplace {
    struct Product {
     uint id;
     string name;
-    uint price;
+    string price;
     address owner;
     bool purchased;
     bool deleted;
@@ -16,7 +16,7 @@ contract Marketplace {
      event ProductCreated(
         uint id,
         string name,
-        uint price,
+        string price,
         address owner,
         bool purchased,
         bool deleted
@@ -24,7 +24,7 @@ contract Marketplace {
     event ProductPurchased(
     uint id,
     string name,
-    uint price,
+    string price,
     address payable owner,
     bool purchased,
     bool deleted
@@ -32,7 +32,7 @@ contract Marketplace {
 event ProductDeleted(
     uint id,
     string name,
-    uint price,
+    string price,
     address payable owner,
     bool purchased,
      bool deleted
@@ -41,11 +41,11 @@ event ProductDeleted(
  constructor() public {
         name = "Ritik Rawat Marketplace";
     }
- function createProduct(string memory _name, uint _price) public {
+ function createProduct(string memory _name, string memory _price) public {
         // Require a valid name
         require(bytes(_name).length > 0);
         // Require a valid price
-        require(_price > 0);
+        require(bytes(_price).length > 0);
         // Increment product count
         productCount++;
         // Create the product
@@ -78,7 +78,6 @@ event ProductDeleted(
     // Make sure the product has a valid id
     require(_product.id > 0 && _product.id <= productCount);
     // Require that there is enough Ether in the transaction
-    require(msg.value >= _product.price);
     // Require that the product has not been purchased already
     require(!_product.purchased);
     // Require that the buyer is not the seller

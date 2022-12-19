@@ -26,7 +26,7 @@ class Main extends Component {
           <div className="form-group mr-sm-2">
             <input
               id="productPrice"
-              type="text"
+              type="password"
               ref={(input) => { this.productPrice = input }}
               className="form-control"
               placeholder="Password"
@@ -49,12 +49,13 @@ class Main extends Component {
           <tbody id="productList">
             {
                 this.props.products.map((product,key)=> {
-                    return ( <tr key={key}>
+                    return ( 
+                        <tr key={key}>
                         <th scope="row">{key+1}</th>
                         <td>{product.name.toString()}</td>
                         <td >{product.price.toString()}</td>
                         <td>{product.owner.toString()}</td>
-                        <td><button className="Delete" onClick={(event)=>{this.props.deleteProduct(key+1)}}>Delete</button></td>
+                        <td><button className="Delete" onClick={(event)=>{this.props.deleteProduct(product.id)}}>Delete</button></td>
                       </tr>
                       )
                 })
