@@ -45,7 +45,8 @@ event ProductDeleted(
 
  constructor() public {
         name = "Komal Gulati Marketplace";
-    } // whenever smart contract run for first time - on deployment
+    } 
+    // whenever smart contract run for first time - on deployment
  function createProduct(string memory _name, string memory _price ,string memory _site) public {
         // Require a valid name
         require(bytes(_name).length > 0);
