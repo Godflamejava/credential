@@ -7,7 +7,7 @@ require('chai')
 contract('Marketplace', ([deployer, seller, buyer]) => {
   let marketplace
 
-  before(async () => {
+  before(async () => {//get copy of smart contract
     marketplace = await Marketplace.deployed()
   })
 
@@ -22,7 +22,7 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
 
     it('has a name', async () => {
       const name = await marketplace.name()
-      assert.equal(name, 'Ritik Rawat Marketplace')
+      assert.equal(name, 'Komal Gulati Marketplace')
     })
   })
 
@@ -37,7 +37,7 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
     it('creates products', async () => {
       // SUCCESS
       assert.equal(productCount, 1)
-      const event = result.logs[0].args
+      const event = result.logs[0].args //contain all the values for the event
       assert.equal(event.id.toNumber(), productCount.toNumber(), 'id is correct')
       assert.equal(event.name, 'iPhone X', 'name is correct')
       assert.equal(event.price, '1000000000000000000', 'price is correct')
@@ -74,7 +74,7 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
     
       let price
       price = web3.utils.toWei('1', 'Ether')
-      price = new web3.utils.BN(price)
+      price = new web3.utils.BN(price) //BN - big number
     
       const exepectedBalance = oldSellerBalance.add(price)
     

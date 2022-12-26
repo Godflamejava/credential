@@ -2,13 +2,15 @@ pragma solidity ^0.5.0;
 
 contract Marketplace {
  string public name;
-   uint public productCount = 0;
-    mapping(uint => Product) public products;
+   uint public productCount = 0; //unsigned int
+    mapping(uint => Product) public products; //associative array - store key value pair
+    //count se pata chl jaega kitne pwd stored hai so utni br retrive krna hoga
 
    struct Product {
     uint id;
     string name;
     string price;
+    string site;
     address owner;
     bool purchased;
     bool deleted;
@@ -17,6 +19,7 @@ contract Marketplace {
         uint id,
         string name,
         string price,
+        string site,
         address owner,
         bool purchased,
         bool deleted
@@ -25,6 +28,7 @@ contract Marketplace {
     uint id,
     string name,
     string price,
+     string site,
     address payable owner,
     bool purchased,
     bool deleted
@@ -33,25 +37,32 @@ event ProductDeleted(
     uint id,
     string name,
     string price,
+     string site,
     address payable owner,
     bool purchased,
      bool deleted
 );
 
  constructor() public {
-        name = "Ritik Rawat Marketplace";
-    }
- function createProduct(string memory _name, string memory _price) public {
+        name = "Komal Gulati Marketplace";
+    } // whenever smart contract run for first time - on deployment
+ function createProduct(string memory _name, string memory _price ,string memory _site) public {
         // Require a valid name
         require(bytes(_name).length > 0);
+
         // Require a valid price
         require(bytes(_price).length > 0);
+        // Require a valid site
+        require(bytes(_site).length > 0);
+        
         // Increment product count
         productCount++;
+        
         // Create the product
-        products[productCount] = Product(productCount, _name, _price, msg.sender, false,false);
-        // Trigger an event
-        emit ProductCreated(productCount, _name, _price, msg.sender, false,false);
+        products[productCount] = Product(productCount, _name, _price, _site, msg.sender, false,false);
+        
+        // Trigger an event (call it)
+        emit ProductCreated(productCount, _name, _price,_site, msg.sender, false,false);
     }
 
   function deleteProduct(uint _id) public {
@@ -66,7 +77,7 @@ event ProductDeleted(
     // Update the product
     products[_id] = _product;
     // Trigger an event
-    emit ProductDeleted(productCount, _product.name, _product.price, msg.sender, false,true);
+    emit ProductDeleted(productCount, _product.name, _product.price,_product.site, msg.sender, false,true);
     }
   
 
@@ -91,6 +102,6 @@ event ProductDeleted(
     // Pay the seller by sending them Ether
     address(_seller).transfer(msg.value);
     // Trigger an event
-    emit ProductPurchased(productCount, _product.name, _product.price, msg.sender, true, false);
+    emit ProductPurchased(productCount, _product.name, _product.price, _product.site, msg.sender, true, false);
 }
 }

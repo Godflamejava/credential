@@ -5,6 +5,8 @@ import './App.css';
 import Marketplace from '../abis/Marketplace.json'
 import Navbar from './Navbar'
 import Main from './Main'
+import HashLoader from "react-spinners/HashLoader";
+
 
 class App extends Component {
 
@@ -34,7 +36,7 @@ class App extends Component {
     const networkId = await web3.eth.net.getId()
     const networkData = Marketplace.networks[networkId]
     if(networkData) {
-      const marketplace = web3.eth.Contract(Marketplace.abi, networkData.address)
+      const marketplace = new web3.eth.Contract(Marketplace.abi, networkData.address)
       this.setState({ marketplace })
       console.log(marketplace)
       const productCount = await marketplace.methods.productCount().call()
@@ -45,6 +47,7 @@ class App extends Component {
       for(var i=1;i<=productCount;i++)
       {
         const product=await marketplace.methods.products(i).call();
+        // console.log(product);
         if(product.deleted==false&&product.owner==this.state.account)
         this.setState({ products:[...this.state.products,product]})
       }
@@ -68,11 +71,13 @@ class App extends Component {
     this.deleteProduct=this.deleteProduct.bind(this)
   }
 
-  createProduct(name, price) {
+  createProduct(name, price,site) {
     this.setState({ loading: true })
-    this.state.marketplace.methods.createProduct(name, price).send({ from: this.state.account })
+    console.log(name,price,site)
+    this.state.marketplace.methods.createProduct(name, price,site).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
+     
     })
   }
   deleteProduct(id) {
@@ -80,19 +85,28 @@ class App extends Component {
     this.state.marketplace.methods.deleteProduct(id).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
+     
     })
   }
 
   render() {
     return (
       <div>
+        
+
+        
         <Navbar account={this.state.account} />
-        <div className="container-fluid mt-5">
+        <div className="container-fluid mt-0.5">
           <div className="row">
-            <main role="main" className="col-lg-12 d-flex ">
-              { this.state.loading
-                ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
-                : <Main 
+            <main role="main" className="col-lg-25 ">
+              { this.state.loading?
+              <div id="loader" className="text-center"><p className="text-center">
+
+                <HashLoader color="#485fc7" />
+
+                </p></div>
+                :
+                <Main 
                 products={this.state.products}
                 createProduct={this.createProduct} 
                 deleteProduct={this.deleteProduct} 
